@@ -303,4 +303,24 @@ section{padding:5.5rem 0}
   .videos__grid,.members,.gallery__grid{grid-template-columns:1fr}
   .hero__stats{gap:1.4rem}
   .newsletter__box{padding:1.8rem}
+  /* obrazec in gumbi se zlozita v stolpec, nic ne prestopi */
+  .newsletter__form{flex-direction:column;align-items:stretch}
+  .newsletter__form input{min-width:0;width:100%}
+  .hero__actions{flex-direction:column;align-items:stretch;text-align:center}
+  .topbar{display:none}
+  .show{grid-template-columns:70px 1fr}
+  .footer__grid{grid-template-columns:1fr}
+}
+/* ---------- dostopnost: upostevaj "zmanjšaj gibanje" ---------- */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .hero__bg{animation:none;transform:none}
+  .reveal{opacity:1;transform:none}
+}
+
+/* zelo majhni zasloni (stari telefoni, pametne ure) */
+@media(max-width:380px){
+  .hero__title{font-size:clamp(2.6rem,13vw,4rem)}
+  .section-title{font-size:clamp(1.7rem,8vw,2.4rem)}
+  .btn{padding:.8rem 1.2rem;font-size:.85rem}
 }
