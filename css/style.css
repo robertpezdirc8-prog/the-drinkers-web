@@ -163,7 +163,10 @@ section{padding:5.5rem 0}
 /* ---------- diskografija ---------- */
 .disc-title{font-family:var(--font-head);text-transform:uppercase;letter-spacing:.2em;color:var(--amber);margin:3.5rem 0 1.4rem;font-size:1.3rem}
 .discography{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem}
-.album{background:var(--smoke);border:1px solid var(--line);border-radius:8px;padding:1.1rem 1.2rem;transition:.25s;position:relative;overflow:hidden}
+.album{background:var(--smoke);border:1px solid var(--line);border-radius:8px;transition:.25s;position:relative;overflow:hidden;margin:0;display:flex;flex-direction:column}
+.album > img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#000;cursor:zoom-in;transition:.35s}
+.album:hover > img{transform:scale(1.04)}
+.album figcaption{padding:.9rem 1rem 1rem}
 .album:hover{border-color:var(--amber);transform:translateY(-4px)}
 .album__year{font-family:var(--font-head);color:var(--amber);letter-spacing:.15em;font-size:.85rem}
 .album h4{font-family:var(--font-head);text-transform:uppercase;letter-spacing:.04em;margin:.3rem 0 .2rem;font-size:1.05rem;color:var(--foam)}
@@ -332,3 +335,16 @@ section{padding:5.5rem 0}
   .section-title{font-size:clamp(1.7rem,8vw,2.4rem)}
   .btn{padding:.8rem 1.2rem;font-size:.85rem}
 }
+
+/* ---------- DOGRADNJA 2026: originalna podoba The Drinkers ---------- */
+.logo__mark{height:46px;width:auto;filter:drop-shadow(0 0 10px rgba(245,179,42,.35));transition:.3s}
+.logo:hover .logo__mark{transform:rotate(-6deg) scale(1.06)}
+.hero__band{display:block;width:min(680px,86%);height:auto;margin:1.4rem auto 0;filter:drop-shadow(0 14px 34px rgba(0,0,0,.6)) contrast(1.06)}
+@media(max-width:860px){.hero__band{width:92%}}
+.story{padding:5rem 0;background:linear-gradient(180deg,#100c07,#0c0a08)}
+.story__grid{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem}
+.story__text h3{font-family:var(--font-head);text-transform:uppercase;letter-spacing:.08em;color:var(--amber);font-size:1.15rem;margin:1.6rem 0 .5rem}
+.story__text h3:first-child{margin-top:0}
+.story__text p{color:#cfc6b8;font-size:.95rem;line-height:1.75;margin:.4rem 0 1rem;text-align:justify;hyphens:auto}
+.story__text em{color:var(--foam)}
+@media(max-width:860px){.story__grid{grid-template-columns:1fr;gap:1.4rem}.story{padding:3.6rem 0}}

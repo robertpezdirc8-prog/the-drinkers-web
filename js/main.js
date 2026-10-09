@@ -75,7 +75,7 @@
   }
 
   /* ---------- lightbox galerija ---------- */
-  var items = Array.prototype.slice.call(document.querySelectorAll('.gitem img'));
+  var items = Array.prototype.slice.call(document.querySelectorAll('.gitem img, .album > img'));
   var lb = document.getElementById('lightbox');
   var lbImg = document.getElementById('lbImg');
   var idx = 0;
