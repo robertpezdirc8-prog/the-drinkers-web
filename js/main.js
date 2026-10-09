@@ -261,4 +261,65 @@
       ctForm.reset();
     });
   }
+
+  /* ---------- GLAVNI SLIDER (dslider) — kot superblockslider na originalu ---------- */
+  (function () {
+    var root = document.querySelector('.dslider');
+    if (!root) return;
+    var track = root.querySelector('.dslider__track');
+    var slides = root.querySelectorAll('.dslide');
+    var dots = root.querySelectorAll('.dslider__dot');
+    var prev = root.querySelector('.dslider__btn--prev');
+    var next = root.querySelector('.dslider__btn--next');
+    var idx = 0, timer = null;
+    var AUTO = parseInt(root.getAttribute('data-auto') || '5000', 10);
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function go(n) {
+      idx = (n + slides.length) % slides.length;
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      slides.forEach(function (s, i) { s.classList.toggle('is-active', i === idx); });
+      dots.forEach(function (d, i) {
+        d.classList.toggle('is-active', i === idx);
+        d.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      });
+    }
+    function start() {
+      if (reduce) return;
+      stop();
+      timer = setInterval(function () { go(idx + 1); }, AUTO);
+    }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+    prev.addEventListener('click', function () { go(idx - 1); start(); });
+    next.addEventListener('click', function () { go(idx + 1); start(); });
+    dots.forEach(function (d, i) {
+      d.addEventListener('click', function () { go(i); start(); });
+    });
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else start();
+    });
+    /* dotik: swipe */
+    var x0 = null;
+    root.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; stop(); }, { passive: true });
+    root.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
+      x0 = null; start();
+    }, { passive: true });
+
+    /* ustavi avtomatsko listanje, ko je odprt lightbox ali drug overlay */
+    var lb = document.querySelector('.lightbox');
+    if (lb) new MutationObserver(function () {
+      var vis = getComputedStyle(lb).display !== 'none';
+      if (vis) stop(); else start();
+    }).observe(lb, { attributes: true, attributeFilter: ['style', 'class'] });
+
+    go(0); start();
+  })();
 })();

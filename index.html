@@ -54,8 +54,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/onepage.css">
+<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/onepage.css?v=4">
+<link rel="stylesheet" href="css/drinkers-theme.css?v=4">
 </head>
 <body>
 
@@ -99,18 +100,41 @@
 
 <main id="glavna">
 
-<!-- HERO -->
+<!-- HERO = GLAVNI SLIDER (kot na thedrinkers.si: statični header + slider) -->
 <section class="hero pane" id="domov">
   <div class="hero__bg" style="background-image:url('img/naslovna-1.png')"></div>
   <div class="hero__overlay"></div>
+
+  <div class="dslider" data-auto="5000" aria-roledescription="carousel" aria-label="Uradne naslovnice The Drinkers 2026">
+    <div class="dslider__window">
+      <div class="dslider__track">
+        <div class="dslide is-active" role="group" aria-roledescription="slide" aria-label="1 od 3">
+          <img src="img/naslovna_1.png" width="1000" height="470" alt="The Drinkers — naslovna slika 2026 (1)" fetchpriority="high">
+        </div>
+        <div class="dslide" role="group" aria-roledescription="slide" aria-label="2 od 3">
+          <img src="img/naslovna_2.png" width="1000" height="470" alt="The Drinkers — naslovna slika 2026 (2)" loading="lazy">
+        </div>
+        <div class="dslide" role="group" aria-roledescription="slide" aria-label="3 od 3">
+          <img src="img/band_photo_bw.png" width="1158" height="408" alt="The Drinkers — skupinska fotografija, črno-bela 2026" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <button class="dslider__btn dslider__btn--prev" type="button" aria-label="Prejšnja stran"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+    <button class="dslider__btn dslider__btn--next" type="button" aria-label="Naslednja stran"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    <div class="dslider__dots" role="tablist" aria-label="Izbira strani">
+      <button class="dslider__dot is-active" type="button" role="tab" aria-selected="true" aria-label="Stran 1"></button>
+      <button class="dslider__dot" type="button" role="tab" aria-selected="false" aria-label="Stran 2"></button>
+      <button class="dslider__dot" type="button" role="tab" aria-selected="false" aria-label="Stran 3"></button>
+    </div>
+  </div>
+
   <div class="container hero__content">
     <p class="hero__kicker">Legendarni zasavski drink'n'roll se je vrnil</p>
     <h1 class="hero__title">THE<br><span class="hero__title-outline">DRINKERS</span></h1>
-    <img class="hero__band" src="img/band-bw.png" alt="The Drinkers — skupinska fotografija 2026" width="1024" height="361" fetchpriority="high">
     <p class="hero__sub">Po skoraj desetletju premora bend iz Litije znova stopa na oder — z novo zasedbo, novim singlom <strong>»Ni še umru«</strong> in isto neukrotljivo filozofijo: žur, prijateljstvo in rock'n'roll.</p>
     <div class="hero__actions">
       <a href="#glasba" class="btn btn--primary">▶ OGLEJ SI VIDEO SPOT</a>
-      <a href="#koncerti" class="btn btn--ghost">📅 KONCERTI 2026</a>
+      <a href="#koncerti" class="btn btn--ghost">KONCERTI 2026</a>
     </div>
     <div class="hero__stats">
       <div class="stat"><span class="stat__num" data-count="33">0</span><span class="stat__label">let na sceni</span></div>
@@ -482,6 +506,6 @@
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="js/main.js?v=4"></script>
 </body>
 </html>
