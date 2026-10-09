@@ -38,7 +38,7 @@
 /* --- ozadje: originalna back-ground slika, fiksno --- */
 body {
   background-color: #050805 !important;
-  background-image: url('../img/bg_main.png') !important;
+  background-image: url('../img/bg_main.webp') !important;
   background-position: center top !important;
   background-size: cover !important;
   background-attachment: fixed !important;
@@ -61,7 +61,7 @@ body {
 
 .header {
   background-color: #071107 !important;
-  background-image: url('../img/bg_main.png') !important;
+  background-image: url('../img/bg_main.webp') !important;
   background-position: center top !important;
   background-size: cover !important;
   border-bottom: 0 !important;
