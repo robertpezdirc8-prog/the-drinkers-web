@@ -2,12 +2,21 @@
    THE DRINKERS — ENOTAJNA IZKUŠNJA (vduš na thedrinkers.si)
    Celotna vsebina je na eni sami strani; vsaka sekcija tvori
    polno "stran" (pane), ki jo ob drsenju ali tipkah PageUp/
-   PageDown/Arrow dol preletimo kot list. Na mobilnem se paneli
-   lepo zložijo drug pod drugega (navadni scroll).
+   PageDown preletimo kot list. Na mobilnem se paneli lepo
+   zložijo drug pod drugega (navadni scroll).
+   ZAGOTOVILA PROTI PREKRIVANJU:
+   - vsebina panela je vedno vidna (brez opacity-0 pasti),
+   - lebdeči elementi (rail, piken štecnik, gumbi za listanje)
+     so fiksni in z visokim z-indexom, nikoli v toku vsebine,
+   - nic backdrop-filter / blur -> ostre robove, brez megle.
    ============================================================ */
 
 html { scroll-behavior: smooth; }
 body.onepage main { overflow: visible; }
+
+/* --- globalno: noben element ne sme biti nedostopen/skrit zaradi animacij --- */
+.pane { position: relative; z-index: 1; }
+main > .pane + .pane { border-top: 1px solid rgba(245,179,42,.08); }
 
 /* --- panel = ena "stran" --- */
 .pane {
@@ -20,19 +29,15 @@ body.onepage main { overflow: visible; }
 }
 .hero.pane { min-height: 100svh; padding: 6rem 0; }
 
-/* --- vstopna animacija panela (samo ko JS omogoči .op-ready) --- */
-body.op-ready .pane > * {
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity .7s ease .05s, transform .7s cubic-bezier(.2,.7,.2,1) .05s;
-}
-body.op-ready .pane.in > * { opacity: 1; transform: none; }
-/* zamik za več stolpčnih blokov (zasedba, galerija …) */
-body.op-ready .pane.in .member:nth-child(2), body.op-ready .pane.in .gitem:nth-child(2) { transition-delay: .10s; }
-body.op-ready .pane.in .member:nth-child(3), body.op-ready .pane.in .gitem:nth-child(3) { transition-delay: .15s; }
-body.op-ready .pane.in .member:nth-child(4), body.op-ready .pane.in .gitem:nth-child(4) { transition-delay: .20s; }
-body.op-ready .pane.in .member:nth-child(5), body.op-ready .pane.in .gitem:nth-child(5) { transition-delay: .25s; }
-body.op-ready .pane.in .member:nth-child(6), body.op-ready .pane.in .gitem:nth-child(6) { transition-delay: .30s; }
+/* --- vstopna animacija: VSEBINA JE VEDNO VIDNA (opacity 1);
+       animira se samo blag pomik, ki nikoli ne povzroci praznega zaslona --- */
+@keyframes paneEnter { from { transform: translateY(14px); } to { transform: none; } }
+body.op-ready .pane.in > * { animation: paneEnter .5s ease both; }
+body.op-ready .pane.in .member:nth-child(2), body.op-ready .pane.in .gitem:nth-child(2) { animation-delay: .06s; }
+body.op-ready .pane.in .member:nth-child(3), body.op-ready .pane.in .gitem:nth-child(3) { animation-delay: .10s; }
+body.op-ready .pane.in .member:nth-child(4), body.op-ready .pane.in .gitem:nth-child(4) { animation-delay: .14s; }
+body.op-ready .pane.in .member:nth-child(5), body.op-ready .pane.in .gitem:nth-child(5) { animation-delay: .18s; }
+body.op-ready .pane.in .member:nth-child(6), body.op-ready .pane.in .gitem:nth-child(6) { animation-delay: .22s; }
 
 /* --- krmilni stolp z pikami (samo namizni) --- */
 .rail { position: fixed; right: 26px; top: 50%; transform: translateY(-50%); z-index: 90; display: none; }
@@ -57,23 +62,25 @@ body.op-ready .pane.in .member:nth-child(6), body.op-ready .pane.in .gitem:nth-c
   position: fixed; right: 22px; bottom: 84px; z-index: 90; display: none;
   font-family: var(--font-head); font-size: .8rem; letter-spacing: .25em;
   color: var(--muted); background: rgba(12,10,8,.75); border: 1px solid var(--line);
-  padding: .35rem .7rem; border-radius: 4px; backdrop-filter: blur(6px);
+  padding: .35rem .7rem; border-radius: 4px; background: #14100b;
   font-variant-numeric: tabular-nums;
 }
 .pagenum b { color: var(--amber); }
 @media (min-width: 1100px) { .pagenum { display: block; } }
 
-/* --- tipka "dol / gor" med paneli (drsnjak listanja) --- */
+/* --- tipka "dol / gor" med paneli: FIKSNO lebdeča, nikoli v toku vsebine,
+       na dnu zaslona kjer se paneli ne morejo prekrivati --- */
 .pagecue {
-  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
-  z-index: 5; width: 42px; height: 42px; border-radius: 50%;
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+  z-index: 95; width: 42px; height: 42px; border-radius: 50%;
   display: grid; place-items: center; cursor: pointer;
-  background: rgba(12,10,8,.55); border: 1px solid rgba(245,179,42,.5); color: var(--amber);
-  transition: .25s; backdrop-filter: blur(4px);
+  background: #14100b; border: 1px solid rgba(245,179,42,.55); color: var(--amber);
+  transition: .25s; box-shadow: 0 6px 18px rgba(0,0,0,.5);
 }
 .pagecue:hover { background: var(--amber-deep); color: #14100b; transform: translateX(-50%) scale(1.08); }
-.pane { position: relative; }
-.hero .hero__scroll { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(245,179,42,.5); background: rgba(12,10,8,.55); animation: none; }
+.pagecue--up { top: 84px; bottom: auto; transform: translateX(-50%); }
+.pagecue--up:hover { transform: translateX(-50%) scale(1.08); }
+.hero .hero__scroll { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(245,179,42,.5); background: #14100b; animation: none; }
 
 /* --- zgodovina+zgodba skupaj: naslov zgodbe --- */
 .story-heading {
@@ -91,8 +98,18 @@ body.op-ready .pane.in .member:nth-child(6), body.op-ready .pane.in .gitem:nth-c
   .pagecue { display: none; }
 }
 
-/* --- reduced motion: nič ne drsi samo od sebe --- */
+/* --- reduced motion: nic ne drsi samo od sebe --- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  body.op-ready .pane > * { opacity: 1; transform: none; transition: none; }
+  body.op-ready .pane.in > * { animation: none !important; opacity: 1; transform: none; }
 }
+
+/* --- CISTKE 2026: brez megle, brez prekrivanj, ostre barve --- */
+img{filter:none!important}
+.hero__bg{filter:saturate(1.05) contrast(1.03)}
+.album > img,.gitem img{background:#0c0a08}
+.cover img{background:#0c0a08}
+.vcard img,.video-frame__thumb img{background:#0c0a08}
+.member__avatar{background:linear-gradient(135deg,#2a2118,#17120d)}
+/* animacije naj ne pušča sledi (transform-leak varovalka) */
+body.op-ready .pane.in > *{backface-visibility:hidden;will-change:auto}

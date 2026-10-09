@@ -4,6 +4,9 @@
 (function () {
   'use strict';
 
+  /* oznaka, da je JS zivy (CSS-only varnostna mreza: brez JS je vse vidno) */
+  document.body.classList.add('js');
+
   /* ---------- mobilni meni ---------- */
   var burger = document.getElementById('burger');
   var nav = document.getElementById('nav');
@@ -57,24 +60,23 @@
   var CHEV_DOWN = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
   var CHEV_UP = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>';
   panes.forEach(function (p, i) {
-    if (i < panes.length - 1) {
-      var b = document.createElement('button');
-      b.className = 'pagecue';
-      b.setAttribute('aria-label', 'Naslednja stran');
-      b.innerHTML = CHEV_DOWN;
-      b.addEventListener('click', function () { goPane(i + 1); });
-      p.appendChild(b);
-    }
-    if (i > 0) {
+    if (i > 0 && i < panes.length - 1) {
       var t = document.createElement('button');
       t.className = 'pagecue pagecue--up';
-      t.style.top = '74px'; t.style.bottom = 'auto';
       t.setAttribute('aria-label', 'Prejšnja stran');
       t.innerHTML = CHEV_UP;
       t.addEventListener('click', function () { goPane(i - 1); });
       p.appendChild(t);
     }
   });
+
+  /* --- skrij lebdece gumbe ko je lightbox odprt --- */
+  function refreshCues() {
+    var lbOpen = lbEl && lbEl.classList.contains('open');
+    document.querySelectorAll('.pagecue').forEach(function (b) {
+      b.style.visibility = lbOpen ? 'hidden' : '';
+    });
+  }
 
   /* listanje s tipkami (samo namizje, ne v obrazcih) */
   function typing(e) {
@@ -186,10 +188,12 @@
     lbImg.alt = items[idx].alt;
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
+    if (typeof refreshCues === 'function') refreshCues();
   }
   function hideLb() {
     lb.classList.remove('open');
     document.body.style.overflow = '';
+    if (typeof refreshCues === 'function') refreshCues();
   }
   items.forEach(function (img, i) {
     img.parentElement.addEventListener('click', function () { showLb(i); });
@@ -223,15 +227,19 @@
     });
   });
 
-  /* ---------- gumb "nazaj na vrh" ---------- */
+  /* ---------- gumb "nazaj na vrh" (samo mobilno; namizje ima rail + dol gumbe) ---------- */
+  var isDesktop = window.matchMedia('(min-width: 861px)');
   var topBtn = document.createElement('button');
   topBtn.className = 'toTop';
   topBtn.setAttribute('aria-label', 'Nazaj na vrh');
   topBtn.textContent = '▲';
   document.body.appendChild(topBtn);
-  window.addEventListener('scroll', function () {
-    topBtn.classList.toggle('show', window.scrollY > 700);
-  }, { passive: true });
+  function toggleTop() {
+    topBtn.classList.toggle('show', !isDesktop.matches && window.scrollY > 700);
+  }
+  window.addEventListener('scroll', toggleTop, { passive: true });
+  if (isDesktop.addEventListener) isDesktop.addEventListener('change', toggleTop);
+  toggleTop();
   topBtn.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });

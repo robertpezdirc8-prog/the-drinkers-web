@@ -71,7 +71,7 @@ section{padding:5.5rem 0}
 .topbar__social a:hover{background:#fff;color:var(--red)}
 
 /* ---------- header / navigacija ---------- */
-.header{position:sticky;top:0;z-index:100;background:rgba(12,10,8,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.header{position:sticky;top:0;z-index:100;background:#0c0a08;border-bottom:1px solid var(--line)}
 .header__inner{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0}
 .logo{display:flex;align-items:center;gap:.6rem;color:var(--foam)}
 .logo__glass{font-size:1.9rem;filter:drop-shadow(0 0 8px rgba(245,179,42,.5));animation:pour 4s ease-in-out infinite}
@@ -95,12 +95,11 @@ section{padding:5.5rem 0}
 .burger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 
 /* ---------- HERO ---------- */
-.hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;padding:6rem 0}
-.hero__bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.05);animation:heroZoom 22s ease-in-out infinite alternate}
-@keyframes heroZoom{from{transform:scale(1.05)}to{transform:scale(1.16) translateY(-1%)}}
-.hero__overlay{position:absolute;inset:0;background:
-  linear-gradient(90deg,rgba(12,10,8,.94) 0%,rgba(12,10,8,.72) 45%,rgba(12,10,8,.35) 100%),
-  radial-gradient(ellipse at 20% 80%,rgba(200,52,31,.25),transparent 55%)}
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;padding:6rem 0;background:var(--black)}
+.hero__bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;transform:none;will-change:auto}
+.hero__overlay{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(12,10,8,.55) 0%,rgba(12,10,8,.82) 60%,rgba(12,10,8,.97) 100%),
+  linear-gradient(90deg,rgba(12,10,8,.9) 0%,rgba(12,10,8,.55) 55%,rgba(12,10,8,.35) 100%)}
 .hero__content{position:relative;z-index:2}
 .hero__kicker{font-family:var(--font-head);letter-spacing:.4em;text-transform:uppercase;color:var(--amber);font-size:clamp(.8rem,1.6vw,1rem);margin-bottom:1rem}
 .hero__title{
@@ -118,8 +117,7 @@ section{padding:5.5rem 0}
 .stat__num{font-family:var(--font-head);font-size:2.4rem;font-weight:700;color:var(--amber);line-height:1}
 .stat__num.gold{color:#ffd76a}
 .stat__label{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.hero__scroll{position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);z-index:2;color:var(--amber);font-size:1.3rem;animation:bounce 1.8s infinite}
-@keyframes bounce{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,9px)}}
+.hero__scroll{position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);z-index:2;color:var(--amber);font-size:1.3rem}
 
 /* ---------- SINGLE ---------- */
 .single{background:
@@ -279,9 +277,10 @@ section{padding:5.5rem 0}
 .footer__bottom p{margin:0}
 .footer__up{color:var(--amber)!important;font-family:var(--font-head);letter-spacing:.1em;text-transform:uppercase;font-size:.8rem}
 
-/* ---------- reveal animacije ---------- */
-.reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s ease}
-.reveal.visible{opacity:1;transform:none}
+/* ---------- reveal animacije (varno: brez JS vse vidno; z JS blaga vstopna animacija) ---------- */
+.reveal{opacity:1;transform:none}
+body.js .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s ease}
+body.js .reveal.visible{opacity:1;transform:none}
 
 /* ---------- nazaj na vrh ---------- */
 .toTop{position:fixed;right:1.4rem;bottom:1.4rem;z-index:150;width:46px;height:46px;border-radius:50%;background:var(--amber);color:#141008;border:0;font-size:1.2rem;cursor:pointer;display:none;box-shadow:0 8px 24px rgba(0,0,0,.5)}
