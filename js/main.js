@@ -22,9 +22,120 @@
     });
   }
 
+  /* ---------- ENOTAJNA IZKUŠNJA: paneli, krmilni stolp, listanje s tipkami ---------- */
+  var panes = Array.prototype.slice.call(document.querySelectorAll('.pane'));
+  var railDots = Array.prototype.slice.call(document.querySelectorAll('.rail__dot'));
+  var links = document.querySelectorAll('.nav__link:not(.nav__link--cta)');
+
+  /* števec strani */
+  var pagenum = document.createElement('div');
+  pagenum.className = 'pagenum';
+  pagenum.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(pagenum);
+
+  function paneIndex(el) { return panes.indexOf(el); }
+
+  function setActive(i) {
+    railDots.forEach(function (d, j) { d.classList.toggle('is-active', j === i); });
+    var id = panes[i] ? panes[i].id : '';
+    links.forEach(function (l) {
+      var h = l.getAttribute('href').slice(1);
+      l.classList.toggle('is-active', h === id || (h === 'zgodba' && id === 'zgodovina'));
+    });
+    if (panes.length) {
+      pagenum.innerHTML = '<b>' + String(i + 1).padStart(2, '0') + '</b> / ' + String(panes.length).padStart(2, '0');
+    }
+  }
+
+  function goPane(i) {
+    i = Math.max(0, Math.min(panes.length - 1, i));
+    panes[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setActive(i);
+  }
+
+  /* gumb "naslednji panel" na dnu vsakega panela (poleg hero scroll) */
+  var CHEV_DOWN = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+  var CHEV_UP = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>';
+  panes.forEach(function (p, i) {
+    if (i < panes.length - 1) {
+      var b = document.createElement('button');
+      b.className = 'pagecue';
+      b.setAttribute('aria-label', 'Naslednja stran');
+      b.innerHTML = CHEV_DOWN;
+      b.addEventListener('click', function () { goPane(i + 1); });
+      p.appendChild(b);
+    }
+    if (i > 0) {
+      var t = document.createElement('button');
+      t.className = 'pagecue pagecue--up';
+      t.style.top = '74px'; t.style.bottom = 'auto';
+      t.setAttribute('aria-label', 'Prejšnja stran');
+      t.innerHTML = CHEV_UP;
+      t.addEventListener('click', function () { goPane(i - 1); });
+      p.appendChild(t);
+    }
+  });
+
+  /* listanje s tipkami (samo namizje, ne v obrazcih) */
+  function typing(e) {
+    var t = e.target;
+    return t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+  }
+  var lbEl = document.getElementById('lightbox');
+  document.addEventListener('keydown', function (e) {
+    if (typing(e) || (lbEl && lbEl.classList.contains('open'))) return;
+    if (window.innerWidth < 861) return;
+    var cur = currentPane();
+    if (e.key === 'PageDown' || (e.altKey && e.key === 'ArrowDown')) { e.preventDefault(); goPane(cur + 1); }
+    else if (e.key === 'PageUp' || (e.altKey && e.key === 'ArrowUp')) { e.preventDefault(); goPane(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); goPane(0); }
+    else if (e.key === 'End') { e.preventDefault(); goPane(panes.length - 1); }
+  });
+
+  /* rail klik */
+  railDots.forEach(function (d) {
+    d.addEventListener('click', function (e) {
+      e.preventDefault();
+      var target = d.getAttribute('href').slice(1);
+      var idx = panes.findIndex(function (p) { return p.id === target; });
+      if (idx >= 0) goPane(idx);
+    });
+  });
+
+  /* trenutni panel = najbližji vrhu zaslona */
+  function currentPane() {
+    var mid = window.innerHeight * 0.35, best = 0, bestD = Infinity;
+    panes.forEach(function (p, i) {
+      var r = p.getBoundingClientRect();
+      var d = Math.abs(Math.max(r.top, 0) - 0) + (r.top < 0 ? Math.min(-r.top, r.height) * 2 : 0);
+      if (r.top <= mid && r.bottom > mid) { best = i; bestD = 0; }
+      else if (bestD !== 0) {
+        var dd = Math.abs(r.top - mid);
+        if (dd < bestD) { bestD = dd; best = i; }
+      }
+    });
+    return best;
+  }
+
+  /* IntersectionObserver: .in razred za animacijo vstopa + posodobitev stanja */
+  if ('IntersectionObserver' in window) {
+    var ioRail = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.intersectionRatio > 0.25) en.target.classList.add('in');
+      });
+      var vis = entries.filter(function (e) { return e.isIntersecting; });
+      if (vis.length) setActive(paneIndex(vis[0].target));
+    }, { threshold: [0, 0.25, 0.6] });
+    panes.forEach(function (p) { ioRail.observe(p); });
+  } else {
+    panes.forEach(function (p) { p.classList.add('in'); });
+  }
+  window.addEventListener('scroll', function () { setActive(currentPane()); }, { passive: true });
+  document.body.classList.add('op-ready');
+  setActive(0);
+
   /* ---------- aktivna povezava v navigaciji (scroll spy) ---------- */
   var sections = document.querySelectorAll('section[id]');
-  var links = document.querySelectorAll('.nav__link:not(.nav__link--cta)');
   function spy() {
     var pos = window.scrollY + 140;
     sections.forEach(function (sec) {
@@ -35,19 +146,9 @@
       }
     });
   }
-  window.addEventListener('scroll', spy, { passive: true });
-  spy();
 
-  /* ---------- reveal animacije ob drsenju ---------- */
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  /* ---------- reveal animacije — na enotajni strani jih nadomestijo paneli (.in) ---------- */
+  document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
 
   /* ---------- steveci v hero sekciji ---------- */
   var counted = false;
