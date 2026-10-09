@@ -106,6 +106,22 @@
     });
   }
 
+  /* ---------- Lite YouTube: iframe se nalozi sele ob kliku ---------- */
+  document.querySelectorAll('[data-yt]').forEach(function (thumb) {
+    thumb.addEventListener('click', function (e) {
+      e.preventDefault();
+      var frame = thumb.closest('.video-frame');
+      var ifr = document.createElement('iframe');
+      ifr.src = thumb.href;
+      ifr.title = 'THE DRINKERS - NI ŠE UMRU ( uradni videospot 2026 )';
+      ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      ifr.allowFullscreen = true;
+      frame.innerHTML = '';
+      frame.appendChild(ifr);
+      ifr.focus && ifr.focus();
+    });
+  });
+
   /* ---------- gumb "nazaj na vrh" ---------- */
   var topBtn = document.createElement('button');
   topBtn.className = 'toTop';

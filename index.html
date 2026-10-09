@@ -10,7 +10,42 @@
 <meta property="og:description" content="Legendarni zasavski drink'n'roll se vrača. Novi singl »Ni še umru«, videospot in turneje 2026.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="img/garaza-hero.jpg">
+<meta property="og:url" content="https://www.thedrinkers.si/">
+<meta property="og:locale" content="sl_SI">
+<meta property="og:site_name" content="The Drinkers">
+<meta name="theme-color" content="#0c0a08">
+<meta name="color-scheme" content="dark">
+<meta name="author" content="The Drinkers — Litija, Slovenija">
+<link rel="canonical" href="https://www.thedrinkers.si/">
+<link rel="preload" as="image" href="img/garaza-hero.jpg" fetchpriority="high">
+<link rel="preconnect" href="https://i.ytimg.com">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍺</text></svg>">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  "name": "The Drinkers",
+  "url": "https://www.thedrinkers.si/",
+  "logo": "https://www.thedrinkers.si/img/live.jpg",
+  "image": "https://www.thedrinkers.si/img/garaza-hero.jpg",
+  "genre": ["Drink'n'roll", "Rock", "Punk rock"],
+  "foundingDate": "1993",
+  "sameAs": ["https://www.youtube.com/@TheDrinkersSlovenija"],
+  "address": { "@type": "PostalAddress", "addressLocality": "Litija", "addressCountry": "SI" },
+  "album": [
+    { "@type": "MusicAlbum", "name": "Lepi in trezni", "datePublished": "1995" },
+    { "@type": "MusicAlbum", "name": "Pivolucija", "datePublished": "1999" },
+    { "@type": "MusicAlbum", "name": "Hajdi", "datePublished": "2007" },
+    { "@type": "MusicAlbum", "name": "Recidiv", "datePublished": "2014" }
+  ],
+  "event": {
+    "@type": "MusicEvent",
+    "name": "The Drinkers — Iz groba na oder",
+    "startDate": "2026-10-03",
+    "location": { "@type": "Place", "name": "Garaža Zagorje", "address": { "@type": "PostalAddress", "addressLocality": "Zagorje pri Litiji", "addressCountry": "SI" } }
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -18,6 +53,7 @@
 </head>
 <body>
 
+<a class="skip-link" href="#glavna">Preskoči na vsebino</a>
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="container topbar__inner">
@@ -54,7 +90,7 @@
   </div>
 </header>
 
-<main>
+<main id="glavna">
 
 <!-- HERO -->
 <section class="hero" id="domov">
@@ -116,7 +152,11 @@
     <h2 class="section-title center">SLUŠAJ. GLEDAJ. NAPOJ.</h2>
     <div class="videos__featured">
       <div class="video-frame">
-        <iframe src="https://www.youtube-nocookie.com/embed/SvPAsFE3Y_8" title="THE DRINKERS - NI ŠE UMRU ( uradni videospot 2026 )" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <!-- zunanja slika (Lite YouTube Embed): iframe se nalozi sele šele ob kliku -->
+        <a class="video-frame__thumb" href="https://www.youtube-nocookie.com/embed/SvPAsFE3Y_8?autoplay=1" data-yt="SvPAsFE3Y_8" aria-label="Predvajaj videospot Ni še umru na YouTubu">
+          <img src="https://i.ytimg.com/vi/SvPAsFE3Y_8/maxresdefault.jpg" alt="Videospot The Drinkers — Ni še umru (2026)" loading="lazy">
+          <span class="video-frame__play" aria-hidden="true">▶</span>
+        </a>
       </div>
       <div class="videos__featured-info">
         <h3>URADNI VIDEO SPOT: »NI ŠE UMRU«</h3>
